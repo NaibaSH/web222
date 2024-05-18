@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NAIBA SHABANOVA - Register Product</title>
+    <link rel="stylesheet" type="text/css" href="Style.css" />
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="honesty.html">Honesty</a></li>
+        <li><a href="product_register.html">Register Product</a></li>
+        <li><a href="reflection.html">Reflection</a></li>
+      </ul>
+    </nav>
+    <header>
+      <h1>Product Registration</h1>
+    </header>
+    <main>
+      <form id="signup" action="https://httpbin.org/post" method="post" onsubmit="return validateForm()">
+        <label for="productID">Product ID:</label>
+        <input type="text" id="productID" name="productID" pattern="[0-9]{8}" required />
+        <div id="productIDError" class="error"></div>
+
+        <label for="description">Product Description:</label>
+        <textarea id="description" name="description" required></textarea>
+        <div id="descriptionError" class="error"></div>
+
+        <label for="price">Price:</label>
+        <input
+          type="number"
+          id="price"
+          name="price"
+          pattern="[0-9]+"
+          min="0"
+          max="999.99"
+          required
+        />
+        <div id="priceError" class="error"></div>
+
+        <label for="supplierUsername">Supplier Username:</label>
+        <input
+          type="text"
+          id="supplierUsername"
+          name="supplierUsername"
+          pattern="[a-zA-Z][a-zA-Z0-9]{3,}"
+          required
+        />
+        <div id="supplierUsernameError" class="error"></div>
+
+        <label>Supplier Status:</label>
+        <input type="checkbox" id="newSupplier" name="supplierStatus" value="New Supplier" />
+        <label for="newSupplier">New Supplier</label>
+        <input type="checkbox" id="contractSigned" name="supplierStatus" value="Contract Signed" />
+        <label for="contractSigned">Contract Signed</label>
+        <input type="checkbox" id="qualityTested" name="supplierStatus" value="Quality Tested" />
+        <label for="qualityTested">Quality Tested</label>
+        <div id="supplierStatusError" class="error"></div>
+
+        <label for="supplierEmail">Supplier Email:</label>
+        <input type="email" id="supplierEmail" name="supplierEmail" required />
+        <div id="supplierEmailError" class="error"></div>
+
+        <input type="hidden" name="FullName" id="FullName" value="NAIBA SHABANOVA" />
+        <input type="hidden" name="studentId" id="studentId" value="164598229" />
+
+        <button type="submit">Submit</button>
+        <button type="reset">Reset</button>
+      </form>
+      <div id="successMessage" class="success"></div>
+    </main>
+    <footer>
+      <p>
+        © 2024 NAIBA SHABANOVA's MOVIES SITE </p> |
+        <a href="https://github.com/NaibaSH/assignment5-Web" target="_blank">GitHub</a>
+      </p>
+    </footer>
+    <script>
+      function validateForm(event) {
+        event.preventDefault();
+
+        // Reset error messages
+        clearErrors();
+
+        // Validate Product ID
+        const productID = document.getElementById('productID').value;
+        if (!/^[0-9]{8}$/.test(productID)) {
+          displayError('productIDError', 'Product ID must be 8 digits');
+          return;
+        }
+
+        // Validate Product Description
+        const description = document.getElementById('description').value;
+        if (description.length < 20) {
+          displayError('descriptionError', 'Product description must be at least 20 characters');
+          return;
+        }
+
+        // Validate Price
+        const price = parseFloat(document.getElementById('price').value);
+        if (isNaN(price) || price <= 0 || price >= 1000) {
+          displayError('priceError', 'Price must be between 0 and 999.99');
+          return;
+        }
+
+        // Validate Supplier Username
+        const supplierUsername = document.getElementById('supplierUsername').value;
+        if (!/^[a-zA-Z][a-zA-Z0-9]{3,}$/.test(supplierUsername)) {
+          displayError(
+            'supplierUsernameError',
+            'Supplier username must start with an alphabet and have at least 4 characters'
+          );
+          return;
+        }
+
+        // Validate Supplier Status
+        const supplierStatusCheckboxes = Array.from(
+          document.querySelectorAll('input[name="supplierStatus"]:checked')
+        ).map((checkbox) => checkbox.value);
+        if (supplierStatusCheckboxes.length === 0) {
+          displayError('supplierStatusError', 'Please select at least one status');
+          return;
+        }
+
+        // Validate Supplier Email
+        const supplierEmail = document.getElementById('supplierEmail').value;
+        if (!document.getElementById('signup').checkValidity()) {
+          displayError('supplierEmailError', 'Invalid email address');
+          return;
+        }
+
+        // Success message
+        document.getElementById('successMessage').innerText = 'Form submitted successfully!';
+      }
+
+      function clearErrors() {
+        // Clear all error messages
+        const errorElements = document.querySelectorAll('.error');
+        errorElements.forEach((element) => (element.innerText = ''));
+      }
+
+      function displayError(id, message) {
+        // Display error message in the specified element
+        const errorElement = document.getElementById(id);
+        if (errorElement) {
+          errorElement.innerText = message;
+        }
+      }
+    </script>
+
+  </body>
+</html>
